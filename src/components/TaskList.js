@@ -11,7 +11,7 @@ const TaskList = ({ tasks, updateTask, deleteTask }) => {
           key={task.id}
           id={task.id}
           title={task.title}
-          isComplete={task.is_complete}
+          isComplete={task.isComplete}
           updateTask={updateTask}
           deleteTask={deleteTask}
         />

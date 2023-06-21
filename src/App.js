@@ -23,20 +23,21 @@ const App = () => {
 const [tasks, setTasks] = useState([]);
 
 //UseEffect to make an API call
-const TASK_API = 'https://task-list-api-c17.onrender.com/tasks';
+const TASK_API = 'https://esef-task-list.onrender.com/tasks';
 const getTaskApi = () => {
   axios.get(TASK_API)
     .then((response) =>{
       const taskCopy = response.data.map((task)=> {
         return {
-          ...task,
+          id: task.id,
+          title: task.title,
           isComplete: task.is_complete,
         };  
       });
       setTasks(taskCopy);
     })
     .catch((error)=>{
-      console.long('error', error);
+      console.log('error', error);
     });
 };
 
@@ -46,20 +47,41 @@ useEffect(getTaskApi, []);
   // created updatedTask function, that then creates a copy of task list
   // matches task to be updated with id, and return an updated lis of tasks, including task changed. 
   const updateTask = (taskId, completedStatus) => {
-    const newTasks = tasks.map((task) => {
-      if (task.id === taskId) {
-        const updatedStatusTask = {... task};
-        updatedStatusTask.isComplete = !completedStatus;
-        return updatedStatusTask;
-      }return {...task};
-    });
-    setTasks(newTasks);
+    console.log('inside update task');
+    const taskCompletionStatus = completedStatus ? 'mark_incomplete':'mark_complete';
+    axios.patch(`${TASK_API}/${taskId}/${taskCompletionStatus}`)
+      .then( () => {
+        const newTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            const updatedStatusTask = {... task};
+            updatedStatusTask.isComplete = !completedStatus;
+            console.log(updatedStatusTask);
+            return updatedStatusTask;
+    
+          }return {...task};
+        });
+        setTasks(newTasks);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      })
+    
   };
- 
+
   const deleteTask = (taskId) => {
-    const newTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(newTasks);     
+    console.log('inside delete')
+    axios.delete(`${TASK_API}/${taskId}`)
+    .then((response) => {
+      console.log(response);
+      const newTasks = tasks.filter((task) => task.id !== taskId); 
+      setTasks(newTasks);
+    })    
+    .catch((error) => {
+      console.log('error', error);
+    });  
   };
+
+
 
   
   return (
