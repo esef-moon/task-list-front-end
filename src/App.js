@@ -1,7 +1,8 @@
 import React from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const TASKS = [
   {
@@ -17,8 +18,31 @@ const TASKS = [
 ];
 
 const App = () => {
-  //setting my "tasks" default state as TASKS array
-  const [tasks, setTasks] = useState(TASKS);
+
+//setting my "tasks" default state as TASKS array
+const [tasks, setTasks] = useState([]);
+
+//UseEffect to make an API call
+const TASK_API = 'https://task-list-api-c17.onrender.com/tasks';
+const getTaskApi = () => {
+  axios.get(TASK_API)
+    .then((response) =>{
+      const taskCopy = response.data.map((task)=> {
+        return {
+          ...task,
+          isComplete: task.is_complete,
+        };  
+      });
+      setTasks(taskCopy);
+    })
+    .catch((error)=>{
+      console.long('error', error);
+    });
+};
+
+useEffect(getTaskApi, []);
+
+
   // created updatedTask function, that then creates a copy of task list
   // matches task to be updated with id, and return an updated lis of tasks, including task changed. 
   const updateTask = (taskId, completedStatus) => {
@@ -27,7 +51,7 @@ const App = () => {
         const updatedStatusTask = {... task};
         updatedStatusTask.isComplete = !completedStatus;
         return updatedStatusTask;
-      } return {...task};
+      }return {...task};
     });
     setTasks(newTasks);
   };
