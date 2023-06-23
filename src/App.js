@@ -31,7 +31,7 @@ const getTaskApi = () => {
         return {
           id: task.id,
           title: task.title,
-          isComplete: task.is_complete,
+          isComplete:  task.is_complete,
         };  
       });
       setTasks(taskCopy);
