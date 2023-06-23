@@ -57,7 +57,6 @@ useEffect(getTaskApi, []);
             updatedStatusTask.isComplete = !completedStatus;
             console.log(updatedStatusTask);
             return updatedStatusTask;
-    
           }return {...task};
         });
         setTasks(newTasks);
