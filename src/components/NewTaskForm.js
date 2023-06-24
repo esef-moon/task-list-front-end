@@ -5,16 +5,16 @@ import "./NewTaskForm.css";
 const INITIAL_FORM_DATA = {
     title: "",
     description: "",
-  };
+};
 
 export default function NewTaskForm(props) {
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-}
+
 
     const changeData = (evt) => {
         const newData = {
             ...formData,
-            [evt.target.name]: evt.target.value
+            [evt.target.name]: evt.target.value,
         };
         setFormData(newData);
     }
@@ -23,7 +23,7 @@ export default function NewTaskForm(props) {
         evt.preventDefault();
         props.addTask(formData);
         setFormData(INITIAL_FORM_DATA);
-    }
+    };
     return (
 
         <div className="NewTaskForm">
@@ -33,20 +33,33 @@ export default function NewTaskForm(props) {
 
                     <input 
                         type="text"
-                        id=""
+                        id="TaskTitle"
                         name="title"
                         value={formData.title}
                         onChange={changeData}
                     />
+                <label htmlFor="TaskDescription">Description:</label>
+
+                    <input 
+                        type="text"
+                        id="TaskDescription"
+                        name="description"
+                        value={formData.description}
+                        onChange={changeData}
+                    />
                     <input type="submit" value="Add Task" />
+                    
             </form>
         
         </div>
 
     )
 
+}
+
     NewTaskForm.propTypes = {
         addTask: PropTypes.func.isRequired
-      }
-      
-      
+      };
+
+
+

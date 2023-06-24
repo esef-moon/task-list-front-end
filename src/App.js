@@ -1,5 +1,6 @@
 import React from 'react';
 import TaskList from './components/TaskList.js';
+import NewTaskForm from "./components/NewTaskForm";
 import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -23,10 +24,11 @@ const App = () => {
 const [tasks, setTasks] = useState([]);
 
 //UseEffect to make an API call
-const TASK_API = 'https://esef-task-list.onrender.com/tasks';
+const TASK_API = 'https://task-list-api-c17.onrender.com/tasks';
 const getTaskApi = () => {
   axios.get(TASK_API)
     .then((response) =>{
+      console.log(response.data);
       const taskCopy = response.data.map((task)=> {
         return {
           id: task.id,
@@ -63,12 +65,12 @@ useEffect(getTaskApi, []);
       })
       .catch((error) => {
         console.log('error', error);
-      })
+      });
     
   };
 
   const deleteTask = (taskId) => {
-    console.log('inside delete')
+    console.log('inside delete');
     axios.delete(`${TASK_API}/${taskId}`)
     .then((response) => {
       console.log(response);
@@ -89,8 +91,10 @@ useEffect(getTaskApi, []);
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
+
         {/* settign prop name update task to function we created on line 19, also make sure your original data prop is set to the state data*/}
         <div>
+        <NewTaskForm />
           <TaskList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
           </div>
       </main>
